@@ -23,22 +23,26 @@ end
 paddle = {}
 paddle.new = function(x, y, width, height, name)
 	local self = {}
-	self.b = love.physics.newBody(world, x, y, "dynamic")
+	self.b = love.physics.newBody(world, x, y, "kinematic")
+	self.b:setInertia(0)
+	self.b:setMass(0)
 	self.s = love.physics.newRectangleShape(width, height)
 	self.f = love.physics.newFixture(self.b, self.s)
 	self.f:setUserData(name)
 	
 	self.update = function()
 		if love.keyboard.isDown("right") then
-			self.b:applyForce(1500, 0)
+			--self.b:applyForce(1500, 0)
+			self.b:setX(self.b:getX() + 1)
 		elseif love.keyboard.isDown("left") then
-			self.b:applyForce(-1500, 0)
+			--self.b:applyForce(-1500, 0)
+			self.b:setX(self.b:getX() - 1)
 		end
-		if love.keyboard.isDown("up") then
+		--[[if love.keyboard.isDown("up") then
 			self.b:applyForce(0, -1500)
 		elseif love.keyboard.isDown("down") then
 			self.b:applyForce(0, 1500)
-		end
+		end]]--
 		if gravity then
 			self.b:setGravityScale(3)
 			self.f:setRestitution(0.5)
