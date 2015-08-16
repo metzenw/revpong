@@ -19,6 +19,46 @@ end
 
 
 -------------------------------------------------------------------------------------------------------
+--Class Paddles ---------------------------------------------------------------------------------------
+paddle = {}
+paddle.new = function(x, y, width, height, name)
+	local self = {}
+	self.b = love.physics.newBody(world, x, y, "dynamic")
+	self.s = love.physics.newRectangleShape(width, height)
+	self.f = love.physics.newFixture(self.b, self.s)
+	self.f:setUserData(name)
+	
+	self.update = function()
+		if love.keyboard.isDown("right") then
+			self.b:applyForce(1500, 0)
+		elseif love.keyboard.isDown("left") then
+			self.b:applyForce(-1500, 0)
+		end
+		if love.keyboard.isDown("up") then
+			self.b:applyForce(0, -1500)
+		elseif love.keyboard.isDown("down") then
+			self.b:applyForce(0, 1500)
+		end
+		if gravity then
+			self.b:setGravityScale(3)
+			self.f:setRestitution(0.5)
+		else
+			self.b:setGravityScale(0)
+			self.f:setRestitution(1)
+		end
+	end
+	
+	self.draw = function()
+		love.graphics.polygon("line", self.b:getWorldPoints(self.s:getPoints()))
+	end
+	
+	return self
+end
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------
 --Class Ball ------------------------------------------------------------------------------------------
 ball = {}
 ball.new = function(x, y, name,offset)
@@ -37,16 +77,6 @@ ball.new = function(x, y, name,offset)
 	self.f:setUserData(name)
 	
 	self.update = function()
-		if love.keyboard.isDown("right") then
-			self.b:applyForce(1500, 0)
-		elseif love.keyboard.isDown("left") then
-			self.b:applyForce(-1500, 0)
-		end
-		if love.keyboard.isDown("up") then
-			self.b:applyForce(0, -1500)
-		elseif love.keyboard.isDown("down") then
-			self.b:applyForce(0, 1500)
-		end
 		if gravity then
 			self.b:setGravityScale(3)
 			self.f:setRestitution(0.5)
